@@ -852,3 +852,13 @@ body{overflow-x:clip}.page{overflow:clip}
   .uitlegband .ak-lees{display:inline-flex!important;align-self:flex-start;margin-top:6px;padding:5px 10px;font-size:12px}
   .ak-t p{-webkit-line-clamp:1!important}
 }
+
+/* foto-moment op de telefoon: zoals op de computer, maar compacter en helderder */
+@media (max-width:900px){
+  .moment{height:470px!important}
+  .moment::after{background:linear-gradient(180deg,rgba(247,245,253,0) 0%,rgba(247,245,253,0) 40%,rgba(247,245,253,.9) 66%,#f7f5fd 82%)!important}
+  .moment-img img{height:100%;object-position:50% 40%!important;transform:none!important;filter:saturate(1.05) contrast(1.05)!important}
+  .moment-txt{padding-bottom:26px!important}
+  .moment blockquote{font-size:27px!important}
+  .moment-txt p{font-size:15.5px}
+}
