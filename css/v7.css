@@ -914,3 +914,32 @@ body{overflow-x:clip}.page{overflow:clip}
   .pb-rij{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"naam" "start" "wie" "knop"!important}
   .pb-start{margin-top:-2px}
 }
+
+
+/* ===== menselijker: rustigere letter, minder kaders, woorden met pen ===== */
+:root{--ink:#1f1d24;--r:20px}
+h1,h2,h3{font-weight:700;letter-spacing:-.028em;color:var(--ink)}
+.hero h1{font-weight:700}
+em.c,em.s{font-style:normal;position:relative;display:inline-block;white-space:nowrap;z-index:0}
+em .pen{position:absolute;pointer-events:none;overflow:visible;z-index:-1}
+em .pen path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.6,.1,.3,1) .15s}
+em.getekend .pen path{stroke-dashoffset:0}
+em.c .pen{left:-9%;top:-16%;width:118%;height:132%}
+em.c .pen path{stroke:var(--lila-d);stroke-width:3.2;vector-effect:non-scaling-stroke}
+em.s .pen{left:-2%;bottom:.02em;width:104%;height:.42em}
+em.s .pen path{stroke:#f5c400;stroke-width:.32em;opacity:.85;vector-effect:non-scaling-stroke}
+.a-t em.s .pen path,.rt em.s .pen path{stroke:#fff;opacity:.9}
+@media (prefers-reduced-motion:reduce){em .pen path{transition:none;stroke-dashoffset:0}}
+/* nummers in plaats van emoji */
+i.nr,b.nr{font-style:normal;font:700 15px/1 Inter,sans-serif!important;color:var(--ink)}
+.kern i.nr{font-size:18px!important}
+/* minder kaders */
+.akaart,.plan,.pb-rij,.feiten>div,.ukaart{border:0!important}
+.plan{box-shadow:0 18px 40px -30px rgba(40,30,80,.35)}
+.chip{font-weight:600}
+.feiten>div small{margin-top:0}
+/* cirkel ruim om het woord heen, streep overal geel */
+em.c{padding:0 .12em}
+em.c .pen{left:-6%!important;top:-30%!important;width:112%!important;height:162%!important}
+em.c .pen path{stroke-width:3.4}
+.a-t em.s .pen path,.rt em.s .pen path{stroke:#f5c400!important;opacity:.95!important}

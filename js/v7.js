@@ -285,3 +285,16 @@
   m.addEventListener("click", (e) => { if (e.target.closest("a")) zet(false); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !m.hidden) zet(false); });
 })();
+
+
+/* woorden omcirkelen of aanstrepen met een handgetekende lijn */
+(() => {
+  const CIRKEL = "M8 32 C 6 12, 60 4, 100 6 C 150 8, 196 16, 194 34 C 192 54, 140 62, 96 60 C 48 58, 4 52, 6 34 C 7 22, 30 14, 52 12";
+  const STREEP = "M4 14 C 50 6, 110 8, 196 10";
+  document.querySelectorAll("em.c, em.s").forEach((em) => {
+    const c = em.classList.contains("c");
+    em.insertAdjacentHTML("beforeend", `<svg class="pen" viewBox="0 0 200 ${c ? 66 : 20}" preserveAspectRatio="none" aria-hidden="true"><path d="${c ? CIRKEL : STREEP}" pathLength="1"/></svg>`);
+  });
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("getekend"); io.unobserve(e.target); } }), { threshold: 0.6 });
+  document.querySelectorAll("em.c, em.s").forEach((em) => io.observe(em));
+})();
