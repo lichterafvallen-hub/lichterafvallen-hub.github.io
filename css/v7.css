@@ -889,3 +889,9 @@ body{overflow-x:clip}.page{overflow:clip}
   .hero .f1{left:14px;top:10px;width:70px}
   .hero .f2{left:auto;right:16px;top:auto;bottom:0;width:84px}
 }
+
+/* geen invlieg-effect: alles staat er meteen (voelde traag en nep) */
+.rv,.rv.in,.split .w{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+.hero p,.hero .pill,.hero::before,.hero::after,.hero-img::after,.hero-img .foto{animation-delay:0s!important}
+.hero p,.hero .pill{opacity:1!important;transform:none!important;animation:none!important}
+.pfoto{background:#f4f1fb}
