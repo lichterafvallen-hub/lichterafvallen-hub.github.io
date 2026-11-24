@@ -183,17 +183,24 @@
     const wrap = band.closest(".band-wrap");
     const kaart = () => { const k = band.querySelector(".plan,.post"); return k ? k.getBoundingClientRect().width + 18 : 320; };
     const gedrag = rust ? "auto" : "smooth";
-    const verder = () => { const eind = band.scrollWidth - band.clientWidth - 4; if (band.scrollLeft >= eind) band.scrollTo({ left: 0, behavior: gedrag }); else band.scrollBy({ left: kaart(), behavior: gedrag }); };
-    const terug = () => { if (band.scrollLeft <= 4) band.scrollTo({ left: band.scrollWidth, behavior: gedrag }); else band.scrollBy({ left: -kaart(), behavior: gedrag }); };
+    /* naar een vaste kaart springen (werkt ook op iPhone met scroll-snap) */
+    const kaarten = () => [...band.querySelectorAll(".plan,.post")];
+    const nu = () => { const ks = kaarten(), x = band.scrollLeft; let best = 0; ks.forEach((k, i) => { if (Math.abs(k.offsetLeft - ks[0].offsetLeft - x) < Math.abs(ks[best].offsetLeft - ks[0].offsetLeft - x)) best = i; }); return best; };
+    const naar = (i) => { const ks = kaarten(); if (!ks.length) return; const n = (i + ks.length) % ks.length; band.scrollTo({ left: ks[n].offsetLeft - ks[0].offsetLeft, behavior: gedrag }); };
+    const verder = () => { const eind = band.scrollWidth - band.clientWidth - 4; if (band.scrollLeft >= eind) naar(0); else naar(nu() + 1); };
+    const terug = () => { if (band.scrollLeft <= 4) naar(kaarten().length - 1); else naar(nu() - 1); };
     let pauze = false, stilTot = 0;
-    setInterval(() => { if (!pauze && !document.hidden && performance.now() > stilTot) verder(); }, 3500);
+    setInterval(() => { if (!pauze && !document.hidden && performance.now() > stilTot) verder(); }, 3000);
     if (wrap) {
       wrap.querySelector(".bpijl.terug").addEventListener("click", () => { terug(); stilTot = performance.now() + 6000; });
       wrap.querySelector(".bpijl.verder").addEventListener("click", () => { verder(); stilTot = performance.now() + 6000; });
     }
-    band.addEventListener("mouseenter", () => (pauze = true)); band.addEventListener("mouseleave", () => (pauze = false));
-    band.addEventListener("focusin", () => (pauze = true)); band.addEventListener("focusout", () => (pauze = false));
-    band.addEventListener("touchstart", () => { stilTot = performance.now() + 8000; }, { passive: true });
+    /* met muis: pauze zolang de muis erop staat. Op de telefoon: na vegen 5 seconden pauze, daarna loopt hij weer vanzelf. */
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      band.addEventListener("mouseenter", () => (pauze = true)); band.addEventListener("mouseleave", () => (pauze = false));
+      band.addEventListener("focusin", (e) => { if (e.target.matches(":focus-visible")) pauze = true; }); band.addEventListener("focusout", () => (pauze = false));
+    }
+    band.addEventListener("touchstart", () => { stilTot = performance.now() + 5000; }, { passive: true });
   });
 
   /* alle plannen: filteren */
@@ -262,4 +269,14 @@
     const body = ber + (naam ? "\n\nGroet,\n" + naam : "");
     location.href = "mailto:lichter.afvallen@gmail.com?subject=" + encodeURIComponent(ond + " (via Lichter)") + "&body=" + encodeURIComponent(body);
   });
+})();
+
+/* mobiel menu */
+(() => {
+  const k = document.querySelector(".mknop"), m = document.getElementById("mmenu");
+  if (!k || !m) return;
+  const zet = (open) => { k.setAttribute("aria-expanded", open); m.hidden = !open; document.body.classList.toggle("menu-open", open); k.querySelector("span").textContent = open ? "Sluiten" : "Menu"; };
+  k.addEventListener("click", () => zet(m.hidden));
+  m.addEventListener("click", (e) => { if (e.target.closest("a")) zet(false); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && !m.hidden) zet(false); });
 })();
