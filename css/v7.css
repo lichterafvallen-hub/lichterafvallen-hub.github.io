@@ -793,14 +793,10 @@ body{background:#fff}
 
   /* bovenkant: tekst meteen zichtbaar, foto groot en rustig */
   .hero{display:block;min-height:0;padding:22px 20px 8px!important}
-  .hero::before,.hero::after,.hero-img::after,.hero .float{display:none!important}
   .hero-txt{padding:0!important}
   .hero h1{font-size:36px;line-height:1.1;margin-bottom:12px}
   .hero .split .w,.hero p,.hero .pill{opacity:1!important;transform:none!important;animation:none!important}
   .hero p{font-size:17px;margin-bottom:20px;max-width:none}
-  .hero-img{height:auto;margin-top:24px}
-  .hero-img .foto{position:relative;left:auto!important;right:auto!important;margin:0!important;width:100%!important;height:auto!important;aspect-ratio:4/3;border-radius:22px;animation:none!important;transform:none!important}
-  .hero-img .foto img{transform:none}
 }
 
 /* vier routes naast elkaar op de telefoon */
@@ -879,4 +875,17 @@ body{overflow-x:clip}.page{overflow:clip}
   .f-grid b{font-size:13px;margin-bottom:6px}
   .f-grid a:not(.logo){font-size:13px;padding:3px 0;line-height:1.35}
   .f-onder{font-size:11.5px!important;margin-top:18px!important;padding-top:14px!important;line-height:1.5}
+}
+
+/* bovenkant op de telefoon: zoals op de computer, ronde foto met kleuren */
+@media (max-width:900px){
+  .hero{overflow:hidden}
+  .hero::before{display:block!important;left:0;top:auto;bottom:40px;width:150px!important;height:230px;border-radius:0 60% 55% 0/0 55% 75% 0;z-index:0}
+  .hero::after{display:none!important}
+  .hero-img{position:relative;height:310px;margin-top:18px}
+  .hero-img::after{display:block!important;right:0;top:30px;width:120px;height:230px}
+  .hero-img .foto{position:absolute;left:50%!important;right:auto!important;margin-left:-135px!important;top:10px;width:270px!important;height:270px!important}
+  .hero .float{display:block}
+  .hero .f1{left:14px;top:10px;width:70px}
+  .hero .f2{left:auto;right:16px;top:auto;bottom:0;width:84px}
 }
