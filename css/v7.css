@@ -862,3 +862,21 @@ body{overflow-x:clip}.page{overflow:clip}
   .moment blockquote{font-size:27px!important}
   .moment-txt p{font-size:15.5px}
 }
+
+/* #ad-label direct bij elke affiliate-knop */
+.adtag{display:block;margin-top:6px;font-size:12px;font-weight:500;color:var(--soft);letter-spacing:.01em}
+.plan .adtag{margin-top:6px}
+.pb-knop .adtag{margin-top:0}
+.koopbalk .adtag{margin-top:2px;font-size:11px}
+.gb-kop .info{margin-top:14px}
+
+/* footer op de telefoon: kort en netjes, drie kolommen naast elkaar */
+@media (max-width:900px){
+  footer{padding-top:28px!important;padding-bottom:22px!important}
+  .f-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px 12px!important}
+  .f-grid>div:first-child{grid-column:1/-1;display:flex;align-items:center;gap:14px}
+  .f-grid>div:first-child p{display:none}
+  .f-grid b{font-size:13px;margin-bottom:6px}
+  .f-grid a:not(.logo){font-size:13px;padding:3px 0;line-height:1.35}
+  .f-onder{font-size:11.5px!important;margin-top:18px!important;padding-top:14px!important;line-height:1.5}
+}
