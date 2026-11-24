@@ -816,16 +816,6 @@ body{background:#fff}
 /* menu blijft bovenaan staan (overflow:clip breekt sticky niet) */
 body{overflow-x:clip}.page{overflow:clip}
 
-/* mobiel: foto-moment helder, tekst eronder */
-@media (max-width:900px){
-  .moment{display:block;height:auto!important;margin:0;background:#f7f5fd}
-  .moment::after{display:none}
-  .moment-img{position:relative;inset:auto;height:300px;overflow:hidden}
-  .moment-img img{height:100%;transform:none!important;filter:none}
-  .moment-txt{padding:24px 20px 34px!important}
-  .moment blockquote{font-size:28px!important}
-}
-
 /* test-blok past binnen het scherm op de telefoon */
 @media (max-width:900px){
   .start{grid-template-columns:minmax(0,1fr)!important;padding:20px!important;margin-left:0;margin-right:0}
@@ -847,4 +837,18 @@ body{overflow-x:clip}.page{overflow:clip}
   .ak-t h3{font-size:16px!important;line-height:1.25;margin-bottom:4px}
   .ak-t p{font-size:13.5px!important;margin:0!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .ak-lees{display:none!important}
+}
+
+/* diashow loopt continu: geen snap, anders springt hij terug */
+.gratisband .band{scroll-snap-type:none!important;scroll-behavior:auto}
+
+/* uitleg-lijst op de telefoon: kleuren terug */
+@media (max-width:900px){
+  .uitlegband .akaart{border-left:7px solid transparent!important}
+  .uitlegband .akaart.lila-rand{border-left-color:var(--lila-d)!important;background:#f6f2ff}
+  .uitlegband .akaart.mint-rand{border-left-color:var(--mint-d)!important;background:#effbf5}
+  .uitlegband .akaart.geel-rand{border-left-color:#e2b400!important;background:#fff9e6}
+  .uitlegband .akaart.koraal-rand{border-left-color:var(--koraal-d)!important;background:#fff2ed}
+  .uitlegband .ak-lees{display:inline-flex!important;align-self:flex-start;margin-top:6px;padding:5px 10px;font-size:12px}
+  .ak-t p{-webkit-line-clamp:1!important}
 }

@@ -179,28 +179,33 @@
   /* band met artikelen: loopt vanzelf, pauzeert bij muis, sleepbaar */
   /* diashow met plannen: gewone horizontale lijst die vanzelf één plan doorschuift.
      Klikken op een plan werkt gewoon; pijltjes gaan één plan terug of verder; op de telefoon veeg je. */
+  /* diashow met plannen: loopt continu en rustig door (de lijst staat er twee keer in, zodat hij naadloos rondgaat).
+     Klikken werkt gewoon. Muis erop = pauze. Op de telefoon: tijdens vegen pauze, daarna loopt hij vanzelf verder. */
   $$(".band").forEach((band) => {
     const wrap = band.closest(".band-wrap");
+    const helft = () => { const k = band.querySelector(".plan.kopie"); return k ? k.offsetLeft - band.querySelector(".plan").offsetLeft : 0; };
     const kaart = () => { const k = band.querySelector(".plan,.post"); return k ? k.getBoundingClientRect().width + 18 : 320; };
-    const gedrag = rust ? "auto" : "smooth";
-    /* naar een vaste kaart springen (werkt ook op iPhone met scroll-snap) */
-    const kaarten = () => [...band.querySelectorAll(".plan,.post")];
-    const nu = () => { const ks = kaarten(), x = band.scrollLeft; let best = 0; ks.forEach((k, i) => { if (Math.abs(k.offsetLeft - ks[0].offsetLeft - x) < Math.abs(ks[best].offsetLeft - ks[0].offsetLeft - x)) best = i; }); return best; };
-    const naar = (i) => { const ks = kaarten(); if (!ks.length) return; const n = (i + ks.length) % ks.length; band.scrollTo({ left: ks[n].offsetLeft - ks[0].offsetLeft, behavior: gedrag }); };
-    const verder = () => { const eind = band.scrollWidth - band.clientWidth - 4; if (band.scrollLeft >= eind) naar(0); else naar(nu() + 1); };
-    const terug = () => { if (band.scrollLeft <= 4) naar(kaarten().length - 1); else naar(nu() - 1); };
-    let pauze = false, stilTot = 0;
-    setInterval(() => { if (!pauze && !document.hidden && performance.now() > stilTot) verder(); }, 3000);
+    const snel = rust ? 0 : 0.45;
+    let pos = band.scrollLeft, pauze = false, stilTot = 0, vinger = false;
+    const lus = () => {
+      const h = helft();
+      if (!pauze && !vinger && !document.hidden && performance.now() > stilTot && snel) {
+        pos += snel; if (h && pos >= h) pos -= h; band.scrollLeft = pos;
+      } else { pos = band.scrollLeft; if (h && pos >= h && !vinger) { pos -= h; band.scrollLeft = pos; } }
+      requestAnimationFrame(lus);
+    };
+    requestAnimationFrame(lus);
+    const stap = (r) => { stilTot = performance.now() + 900; const h = helft(); let doel = band.scrollLeft + r * kaart(); if (doel < 0 && h) { band.scrollLeft += h; doel += h; } band.scrollTo({ left: doel, behavior: "smooth" }); };
     if (wrap) {
-      wrap.querySelector(".bpijl.terug").addEventListener("click", () => { terug(); stilTot = performance.now() + 6000; });
-      wrap.querySelector(".bpijl.verder").addEventListener("click", () => { verder(); stilTot = performance.now() + 6000; });
+      wrap.querySelector(".bpijl.terug").addEventListener("click", () => stap(-1));
+      wrap.querySelector(".bpijl.verder").addEventListener("click", () => stap(1));
     }
-    /* met muis: pauze zolang de muis erop staat. Op de telefoon: na vegen 5 seconden pauze, daarna loopt hij weer vanzelf. */
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
       band.addEventListener("mouseenter", () => (pauze = true)); band.addEventListener("mouseleave", () => (pauze = false));
-      band.addEventListener("focusin", (e) => { if (e.target.matches(":focus-visible")) pauze = true; }); band.addEventListener("focusout", () => (pauze = false));
     }
-    band.addEventListener("touchstart", () => { stilTot = performance.now() + 5000; }, { passive: true });
+    band.addEventListener("touchstart", () => (vinger = true), { passive: true });
+    band.addEventListener("touchend", () => { vinger = false; stilTot = performance.now() + 1500; }, { passive: true });
+    band.addEventListener("wheel", () => { stilTot = performance.now() + 1500; }, { passive: true });
   });
 
   /* alle plannen: filteren */
