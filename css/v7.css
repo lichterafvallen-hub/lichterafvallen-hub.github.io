@@ -1006,13 +1006,7 @@ em.c .pen path{stroke-width:3.4}
 .planbox.pb-mint .pill{background:#14875c!important}.planbox.pb-geel .pill{background:#8a6500!important}.planbox.pb-koraal .pill{background:#cf4a26!important}
 .planbox.pb-mint{background:#e8f7ef}.planbox.pb-geel{background:#fff6d9}.planbox.pb-koraal{background:#ffece5}
 
-/* route-plaatjes zweven heel zachtjes (vooral voor telefoons, daar is geen muis) */
-@keyframes zweef{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.route img{animation:zweef 4.5s ease-in-out infinite}
-.route:nth-child(2) img{animation-delay:-1.1s}.route:nth-child(3) img{animation-delay:-2.2s}.route:nth-child(4) img{animation-delay:-3.3s}
-.route:hover img{animation-play-state:paused}
-@media (max-width:900px){@keyframes zweefk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}.route img{animation-name:zweefk}}
-@media (prefers-reduced-motion:reduce){.route img{animation:none}}
+
 
 /* pen tekent zichtbaar: iets langzamer */
 em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!important}
