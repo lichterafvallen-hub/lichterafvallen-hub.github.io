@@ -943,3 +943,34 @@ em.c{padding:0 .12em}
 em.c .pen{left:-6%!important;top:-30%!important;width:112%!important;height:162%!important}
 em.c .pen path{stroke-width:3.4}
 .a-t em.s .pen path,.rt em.s .pen path{stroke:#f5c400!important;opacity:.95!important}
+
+
+/* ===== routepagina's: echter ontwerp ===== */
+.rhero{grid-template-columns:1fr 1fr!important;align-items:stretch!important;min-height:440px}
+.rhero .rt{display:flex;flex-direction:column;justify-content:center;padding:52px 56px!important}
+.rhero .rh-foto{position:relative;min-height:100%}
+.rhero .rh-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;aspect-ratio:auto!important}
+.rhero h1{font-weight:700!important}
+/* drie punten: grote dunne cijfers met een lijn */
+.kort2{grid-template-columns:1fr!important}
+.kern{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important;margin-top:8px}
+.kern div{display:block!important;border:0!important;border-top:2px solid var(--ink)!important;border-radius:0!important;padding:16px 0 0!important;font-weight:500!important;font-size:17px;line-height:1.45}
+.kern i.nr{display:block;width:auto!important;height:auto!important;background:none!important;border-radius:0!important;font:300 44px/1 Inter,sans-serif!important;letter-spacing:-.04em;color:var(--lila-d)!important;margin-bottom:12px}
+.tipr{border-left:3px solid var(--geel);padding-left:14px;color:var(--ink)!important;opacity:.8}
+/* past wel / niet: rustige kolommen zonder vinkjes en kruisjes */
+.wn>div{background:#fff!important;border-radius:0!important;padding:18px 0 0!important;border-top:3px solid var(--mint-d)}
+.wn>div.niet{border-top-color:var(--koraal-d)}
+.wn li::before{content:""!important;flex:none;width:7px;height:7px;border-radius:50%;background:var(--mint-d);margin-top:.6em}
+.wn .niet li::before{background:var(--koraal-d)}
+.wn li{display:flex;gap:12px;align-items:flex-start}
+.wn{gap:44px!important}
+@media (max-width:900px){
+  .rhero{grid-template-columns:1fr!important;min-height:0}
+  .rhero .rh-foto{order:-1;height:230px}
+  .rhero .rt{padding:24px 20px 26px!important}
+  .kern{grid-template-columns:1fr!important;gap:18px!important}
+  .kern i.nr{font-size:34px!important;margin-bottom:6px}
+  .wn{grid-template-columns:1fr!important;gap:26px!important}
+}
+.wn li{padding-left:0!important}.wn li::before{position:static!important;top:auto!important}
+.rhero .rt .pill,.rhero .rt .crumb{align-self:flex-start}
