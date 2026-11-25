@@ -1070,3 +1070,32 @@ em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!i
   .mm-meer a{background:#f4f3f7!important}
   .mm-gids{background:var(--ink)!important}
 }
+
+/* ===== home: maar één gekleurd blok (de test); startgids en uitleg anders ===== */
+/* startgids: geen gekleurde doos, tekst links en de gids rechts op wit */
+.gidsblok{background:none!important;border-radius:0!important;overflow:visible!important;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 0}
+.gidsblok .gb-t{order:1;padding:30px 40px 30px 0!important;align-self:center}
+.gidsblok .gb-boek{order:2;background:none!important;min-height:380px}
+.gb-pag{box-shadow:0 34px 60px -30px rgba(30,20,60,.35),0 0 0 1px rgba(0,0,0,.04)!important}
+.gidsblok .vink li::before{background:var(--ink)!important}
+/* uitleg: gebroken wit, artikelen als in een tijdschrift */
+.uitlegband{background:#faf8f4!important}
+.uitlegband::before{display:none!important}
+.uitlegband .akaart{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+.uitlegband .ak-img{border-radius:14px;overflow:hidden}
+.uitlegband .ak-img .chip{background:#fff!important;color:var(--ink)!important;font-size:12px}
+.uitlegband .ak-t{padding:16px 0 0!important}
+.uitlegband .ak-lees{background:none!important;color:var(--ink)!important;padding:0!important;font-size:14.5px!important;font-weight:700;border-bottom:2px solid var(--ink);border-radius:0!important}
+.uitlegband .akaart:hover{transform:none!important}
+.uitlegband .akaart:hover .ak-img img{transform:scale(1.04)}
+@media (max-width:900px){
+  .gidsblok{padding:10px 0 20px}
+  .gidsblok .gb-t{padding:22px 0 0!important}
+  .gidsblok .gb-boek{order:0;min-height:320px}
+  .uitlegband .akaart{background:#fff!important;border-left:3px solid transparent!important;border-radius:14px!important;overflow:hidden}
+  .uitlegband .ak-img{border-radius:0}
+  .uitlegband .ak-t{padding:12px 14px!important}
+  .uitlegband .akaart.lila-rand,.uitlegband .akaart.mint-rand,.uitlegband .akaart.geel-rand,.uitlegband .akaart.koraal-rand{background:#fff!important}
+  .uitlegband .ak-lees{border-bottom-width:1.5px;font-size:12.5px!important;margin-top:6px}
+}
+.gidsblok .vink li::before{background:#f1f0f5!important;color:var(--ink)!important}
