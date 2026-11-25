@@ -1039,3 +1039,34 @@ em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!i
 .gidsblok:hover .gb-pag.voor{transform:translate(-40px,2px) rotate(-6deg)}
 .gidsblok:hover .gb-pag.achter{transform:translate(66px,-18px) rotate(9deg)}
 @media (max-width:900px){.gb-boek{min-height:330px}.gb-pag{width:220px}.gb-pag.voor{transform:translate(-22px,8px) rotate(-4deg)}.gb-pag.achter{transform:translate(40px,-10px) rotate(7deg);height:260px}}
+
+
+/* ===== mobiel menu in Lichter-stijl ===== */
+@media (max-width:900px){
+  .mmenu:not([hidden]){background:#f6f3ff!important;padding:14px 20px 32px!important}
+  .mm-kop{margin:4px 0 10px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+  .mm-routes{display:grid!important;gap:10px}
+  .mm-r{display:grid!important;grid-template-columns:52px 1fr auto;align-items:center;gap:14px;background:#fff;border-radius:16px;padding:10px 14px 10px 10px!important;border:0!important;border-left:5px solid var(--lila-d)!important;text-decoration:none;box-shadow:0 10px 24px -20px rgba(40,25,90,.5)}
+  .mm-r.mint{border-left-color:var(--mint-d)!important}.mm-r.geel{border-left-color:#e2b400!important}.mm-r.koraal{border-left-color:var(--koraal-d)!important}
+  .mm-r img{width:52px;height:52px;border-radius:12px;object-fit:cover}
+  .mm-r b{display:grid;gap:1px;font-size:17px;font-weight:700;color:var(--ink)}
+  .mm-r b span{font-size:13px;font-weight:400;color:var(--soft)}
+  .mm-r i{font-style:normal;color:var(--soft)}
+  .mm-r[aria-current]{outline:2px solid var(--ink)}
+  .mm-meer{display:flex!important;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .mm-meer a{display:inline-block!important;padding:10px 14px!important;border:0!important;border-radius:99px;background:#fff;font-size:15px!important;font-weight:600!important;color:var(--ink);text-decoration:none}
+  .mm-meer a[aria-current]{background:var(--ink);color:#fff}
+  .mm-gids{display:grid;grid-template-columns:1fr auto;align-items:center;margin-top:20px;padding:18px 20px;border-radius:18px;background:var(--lila-d);color:#fff;text-decoration:none}
+  .mm-gids small{grid-column:1;font-size:12px;opacity:.85}
+  .mm-gids b{grid-column:1;font-size:18px}
+  .mm-gids .ar{grid-column:2;grid-row:1/3;font-size:22px}
+}
+/* menu rustig: wit, geen extra kleuren, alleen fotootjes */
+@media (max-width:900px){
+  .mmenu:not([hidden]){background:#fff!important}
+  .mm-routes{gap:0!important;border-top:1px solid var(--line)}
+  .mm-r{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;background:none!important;padding:12px 0!important}
+  .mm-r[aria-current]{outline:0}.mm-r[aria-current] b{text-decoration:underline;text-underline-offset:4px}
+  .mm-meer a{background:#f4f3f7!important}
+  .mm-gids{background:var(--ink)!important}
+}
