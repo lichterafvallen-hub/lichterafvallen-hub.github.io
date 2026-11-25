@@ -995,3 +995,13 @@ em.c .pen path{stroke-width:3.4}
 .plan{transition:transform .3s var(--ease),box-shadow .3s}
 .plan:hover{transform:translateY(-4px);box-shadow:0 34px 60px -34px rgba(40,25,90,.55)}
 .planband .plans{grid-template-columns:repeat(auto-fit,minmax(280px,380px))!important;gap:22px!important}
+
+/* productband en knoppen in de kleur van de route */
+.planband.pb-lila{background:#f1eefb}.planband.pb-mint{background:#e8f7ef}.planband.pb-geel{background:#fff6d9}.planband.pb-koraal{background:#ffece5}
+.plan[data-route="keto"] .pill{background:var(--lila-d)!important}
+.plan[data-route="afvallen"] .pill{background:#14875c!important}
+.plan[data-route="recepten"] .pill{background:#8a6500!important}
+.plan[data-route="bewegen"] .pill{background:#cf4a26!important}
+.plan[data-route] .pill:hover{filter:brightness(.9)}
+.planbox.pb-mint .pill{background:#14875c!important}.planbox.pb-geel .pill{background:#8a6500!important}.planbox.pb-koraal .pill{background:#cf4a26!important}
+.planbox.pb-mint{background:#e8f7ef}.planbox.pb-geel{background:#fff6d9}.planbox.pb-koraal{background:#ffece5}
