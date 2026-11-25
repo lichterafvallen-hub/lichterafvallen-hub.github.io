@@ -974,3 +974,24 @@ em.c .pen path{stroke-width:3.4}
 }
 .wn li{padding-left:0!important}.wn li::before{position:static!important;top:auto!important}
 .rhero .rt .pill,.rhero .rt .crumb{align-self:flex-start}
+
+/* ===== lees-verder en producten springen eruit (zonder cirkels) ===== */
+.ukaart{border:0!important;box-shadow:0 30px 60px -40px rgba(40,25,90,.5)}
+.uk-lila{background:#f1ebff!important}.uk-mint{background:#e6f8ef!important}.uk-geel{background:#fff6d6!important}.uk-koraal{background:#ffece5!important}
+.uk-t b{font-size:32px!important}
+.uk-tag{display:inline-block;background:var(--ink);color:#fff;border-radius:6px;padding:3px 8px;margin-right:8px;font-size:11px;letter-spacing:.08em}
+.uk-t small{color:var(--ink)!important;opacity:.75}
+.ukaart .pill{background:var(--lila-d);font-size:15px;padding:15px 24px}
+.uk-mint .pill{background:#14875c}.uk-geel .pill{background:#1f1d24}.uk-koraal .pill{background:#d24f2c}
+.ukaart:hover{transform:translateY(-5px)!important;box-shadow:0 40px 70px -40px rgba(40,25,90,.6)!important}
+.ukaart:hover .pill .ar{transform:translateX(4px)}.ukaart .pill .ar{transition:transform .25s var(--ease)}
+.uk-img img{transition:transform .6s var(--ease)}.ukaart:hover .uk-img img{transform:scale(1.03)}
+
+/* productband: gekleurde achtergrond, witte kaarten, paarse knoppen */
+.planband{background:var(--bg);margin-top:30px;padding-top:56px!important;padding-bottom:56px!important}
+.planband .plan,.gratisband .plan,#lijst .plan{background:#fff;box-shadow:0 24px 50px -34px rgba(40,25,90,.45)}
+.plan .pill,.pb-knop .pill{background:var(--lila-d)!important;color:#fff!important}
+.plan .pill:hover,.pb-knop .pill:hover{background:#7442d6!important}
+.plan{transition:transform .3s var(--ease),box-shadow .3s}
+.plan:hover{transform:translateY(-4px);box-shadow:0 34px 60px -34px rgba(40,25,90,.55)}
+.planband .plans{grid-template-columns:repeat(auto-fit,minmax(280px,380px))!important;gap:22px!important}
