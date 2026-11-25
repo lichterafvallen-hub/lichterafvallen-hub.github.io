@@ -1016,3 +1016,26 @@ em.c .pen path{stroke-width:3.4}
 
 /* pen tekent zichtbaar: iets langzamer */
 em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!important}
+
+
+/* ===== startgids-blok op home: de gids zelf laten zien ===== */
+.gidsblok{background:#e9e1fd!important}
+.gb-boek{position:relative;min-height:400px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(160deg,#d9ccfb,#c9b6fa)}
+.gb-pag{position:absolute;width:250px;background:#fff;border-radius:6px;padding:22px 22px 20px;box-shadow:0 30px 50px -28px rgba(50,25,120,.55),0 2px 0 rgba(0,0,0,.03);font-size:12.5px;line-height:1.35;transition:transform .6s var(--ease)}
+.gb-pag.achter{transform:translate(58px,-14px) rotate(7deg);height:290px;opacity:.95}
+.gb-pag.achter b{display:block;font-size:15px;margin-bottom:12px}
+.gb-pag.achter span{display:block;height:9px;border-radius:4px;background:#efecf6;margin:12px 0 0 22px;position:relative}
+.gb-pag.achter span::before{content:"";position:absolute;left:-22px;top:-2px;width:12px;height:12px;border:1.5px solid #cfc8e3;border-radius:3px}
+.gb-pag.voor{transform:translate(-34px,8px) rotate(-4deg)}
+.gb-pag small{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--lila-d);margin-bottom:4px}
+.gb-pag.voor>b{display:block;font-size:21px;letter-spacing:-.02em;margin-bottom:12px}
+.gb-pag p{display:flex;align-items:center;gap:9px;margin:0;padding:7px 0;border-top:1px solid #f0edf6;color:#3a3842}
+.gb-pag p em{font-style:normal;font-weight:700;color:var(--soft);width:38px;flex:none}
+.gb-pag p i{flex:none;width:14px;height:14px;border-radius:50%;border:1.5px solid #cfc8e3}
+.gb-pag p.af i{background:var(--mint-d);border-color:var(--mint-d);box-shadow:inset 0 0 0 3px #fff}
+.gb-pag p.af{color:var(--soft);text-decoration:line-through;text-decoration-color:#bbb}
+.gb-balk{height:6px;border-radius:9px;background:#efecf6;margin-top:12px;overflow:hidden}.gb-balk span{display:block;height:100%;background:var(--mint-d);border-radius:9px}
+.gb-tel{margin:6px 0 0!important;color:var(--soft)!important;letter-spacing:0!important;text-transform:none!important;font-weight:500!important}
+.gidsblok:hover .gb-pag.voor{transform:translate(-40px,2px) rotate(-6deg)}
+.gidsblok:hover .gb-pag.achter{transform:translate(66px,-18px) rotate(9deg)}
+@media (max-width:900px){.gb-boek{min-height:330px}.gb-pag{width:220px}.gb-pag.voor{transform:translate(-22px,8px) rotate(-4deg)}.gb-pag.achter{transform:translate(40px,-10px) rotate(7deg);height:260px}}
