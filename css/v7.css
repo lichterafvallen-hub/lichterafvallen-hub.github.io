@@ -1099,3 +1099,6 @@ em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!i
   .uitlegband .ak-lees{border-bottom-width:1.5px;font-size:12.5px!important;margin-top:6px}
 }
 .gidsblok .vink li::before{background:#f1f0f5!important;color:var(--ink)!important}
+/* startgids als echt product: tablet en telefoon */
+.gidsblok .gb-boek{min-height:0!important;display:block;overflow:visible!important}
+.gb-boek img{display:block;width:100%;max-width:640px;height:auto;margin:0 auto}
