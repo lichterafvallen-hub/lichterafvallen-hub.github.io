@@ -295,6 +295,6 @@
     const c = em.classList.contains("c");
     em.insertAdjacentHTML("beforeend", `<svg class="pen" viewBox="0 0 200 ${c ? 66 : 20}" preserveAspectRatio="none" aria-hidden="true"><path d="${c ? CIRKEL : STREEP}" pathLength="1"/></svg>`);
   });
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("getekend"); io.unobserve(e.target); } }), { threshold: 0.6 });
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("getekend"); io.unobserve(e.target); } }), { threshold: 1, rootMargin: "0px 0px -32% 0px" });
   document.querySelectorAll("em.c, em.s").forEach((em) => io.observe(em));
 })();

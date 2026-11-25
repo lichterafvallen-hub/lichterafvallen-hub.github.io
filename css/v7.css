@@ -1013,3 +1013,6 @@ em.c .pen path{stroke-width:3.4}
 .route:hover img{animation-play-state:paused}
 @media (max-width:900px){@keyframes zweefk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}.route img{animation-name:zweefk}}
 @media (prefers-reduced-motion:reduce){.route img{animation:none}}
+
+/* pen tekent zichtbaar: iets langzamer */
+em .pen path{transition:stroke-dashoffset 1.3s cubic-bezier(.55,.05,.3,1) .25s!important}
