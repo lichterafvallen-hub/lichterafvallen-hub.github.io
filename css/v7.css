@@ -1280,5 +1280,3 @@ footer{margin-top:0!important}
 .m3-r em{color:#d4382a!important}
 /* stukjes zacht in en uit beeld (geen flits bij snel scrollen) */
 .vlieg{visibility:visible!important;opacity:0;transition:opacity .25s ease}
-/* Chrome 'scroll anchoring' uit: anders kan de pagina bij snel terugscrollen langs de vastgezette salade naar boven springen */
-html,body{overflow-anchor:none}
