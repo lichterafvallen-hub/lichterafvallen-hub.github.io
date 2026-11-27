@@ -255,6 +255,23 @@
   /* band met artikelen: loopt vanzelf, pauzeert bij muis, sleepbaar */
   /* diashow met plannen: gewone horizontale lijst die vanzelf één plan doorschuift.
      Klikken op een plan werkt gewoon; pijltjes gaan één plan terug of verder; op de telefoon veeg je. */
+  /* keto-pagina, telefoon: gratis-test-plannen schuiven vanzelf van links naar rechts, met pijltjes. Vegen = even pauze. */
+  const kp = document.querySelector(".planband.pb-lila .plans");
+  if (kp && matchMedia("(max-width:900px)").matches && kp.children.length > 1) {
+    const wrap = document.createElement("div"); wrap.className = "band-wrap kp-wrap"; kp.parentNode.insertBefore(wrap, kp); wrap.appendChild(kp);
+    const pijl = (kant, label, pad) => { const b = document.createElement("button"); b.type = "button"; b.className = "bpijl " + kant; b.setAttribute("aria-label", label);
+      b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${pad}"/></svg>`; wrap.appendChild(b); return b; };
+    const terug = pijl("terug", "Vorige plan", "M15 5l-7 7 7 7"), verder = pijl("verder", "Volgende plan", "M9 5l7 7-7 7");
+    const stapB = () => { const c = kp.querySelector(".plan"); return c ? c.getBoundingClientRect().width + 14 : 300; };
+    const naar = (r) => { const max = kp.scrollWidth - kp.clientWidth; let d = kp.scrollLeft + r * stapB();
+      if (r > 0) d = kp.scrollLeft >= max - 4 ? 0 : Math.min(d, max); else d = kp.scrollLeft <= 4 ? max : Math.max(d, 0);
+      kp.scrollTo({ left: d, behavior: "smooth" }); };
+    let stilTot = 0; const pauze = (ms) => (stilTot = performance.now() + ms);
+    terug.onclick = () => { pauze(6000); naar(-1); }; verder.onclick = () => { pauze(6000); naar(1); };
+    kp.addEventListener("touchstart", () => pauze(6000), { passive: true });
+    if (!rust) setInterval(() => { if (performance.now() > stilTot && !document.hidden) naar(1); }, 3200);
+  }
+
   /* diashow met plannen: loopt continu en rustig door (de lijst staat er twee keer in, zodat hij naadloos rondgaat).
      Klikken werkt gewoon. Muis erop = pauze. Op de telefoon: tijdens vegen pauze, daarna loopt hij vanzelf verder. */
   $$(".band").forEach((band) => {
