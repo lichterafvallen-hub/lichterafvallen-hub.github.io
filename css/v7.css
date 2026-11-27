@@ -1232,3 +1232,12 @@ footer{margin-top:0!important}
 /* nog korter: 1 a 2 keer vegen op de telefoon */
 .m3{height:165vh}
 @media (max-width:900px){.m3{height:138vh}}
+/* 3D-stukjes bij de overgang: starten rond de schaal, vliegen groter wordend naar je toe */
+.vlieg{--cx:64%;top:calc(100% - 100vh)!important;height:200vh!important;overflow:hidden;opacity:0}
+.vlieg img{margin-left:-30px;opacity:0;transform:scale(.35);transform-origin:50% 50%}
+@media (max-width:900px){.vlieg{--cx:50%}.vlieg .m-weg{display:block}.vlieg img{max-width:none}}
+.m3{height:230vh}
+@media (max-width:900px){.m3{height:200vh}}
+/* stukjes vast in beeld tijdens de overgang, zodat ze niet onder een volgende sectie verdwijnen */
+.vlieg{position:fixed!important;inset:0!important;top:0!important;height:100vh!important;height:100svh!important;z-index:40!important;overflow:hidden;visibility:hidden;opacity:1}
+.vlieg img{opacity:0}

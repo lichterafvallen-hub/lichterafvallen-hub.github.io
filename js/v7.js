@@ -99,22 +99,30 @@
       const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
       if (i !== laatste) { teken(i); laatste = i; }
       if (nu !== doel) raf3 = requestAnimationFrame(lus); };
-    const upd3 = () => { const p = voortgang();
-      /* eerst rustige schaal (tot A), het loskomen (A tot B) gaat snel, daarna rustig vliegen tot het eind */
-      const q = Math.min(1, p / .92);
-      doel = !B ? q * (N - 1) : q < .04 ? q / .04 * A : q < .12 ? A + (q - .04) / .08 * (B - A) : B + (q - .12) / .88 * (N - 1 - B);
-      const stap = p < .12 ? 0 : p < .55 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
+    /* 1e scroll: salade komt omhoog uit de schaal; 2e scroll: de explosie. Alleen vooruit, nooit terugspoelen. */
+    const upd3 = () => { const p = voortgang(), q = Math.min(1, p / .96);
+      if (!B) doel = q * (N - 1);
+      else if (q < .5) { const h = q / .5; doel = h < .15 ? h / .15 * A : A + (h - .15) / .85 * (B - A); }
+      else doel = B + (q - .5) / .5 * (N - 1 - B);
+      const stap = q < .5 ? 0 : q < .88 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
       if (!raf3) raf3 = requestAnimationFrame(lus); };
-    /* losse stukjes uit de video vliegen door over de volgende sectie */
+    /* 3e scroll: bij de overgang naar de plannen vliegen losse stukjes in 3D naar je toe en langs je heen */
     const vl = scrub.querySelector(".vlieg");
     if (vl && !rust) {
       const stukjes = [...vl.children];
-      const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, innerHeight - r.bottom), p = voortgang();
-        if (r.bottom < -innerHeight || r.top > innerHeight) return;
-        vl.style.opacity = Math.min(1, Math.max(0, (p - .82) / .12)).toFixed(2);
-        stukjes.forEach((el) => { const d = +el.dataset.d, ro = +el.dataset.r;
-          el.style.transform = "translate3d(0," + (-na * d).toFixed(1) + "px,0) rotate(" + (na * ro / 500).toFixed(1) + "deg)"; }); };
-      addEventListener("scroll", vlieg, { passive: true }); vlieg();
+      /* vast in beeld; stukjes gaan meteen naar de zijkanten (nooit over de tekst) en verlaten het scherm zijwaarts */
+      const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, innerHeight - r.bottom);
+        const t = Math.min(1, na / (innerHeight * .9));
+        if (t <= 0 || t >= 1 || r.top > innerHeight) { vl.style.visibility = "hidden"; return; }
+        vl.style.visibility = "visible"; vl.style.opacity = 1;
+        const W = innerWidth;
+        stukjes.forEach((el) => { const dx = +el.dataset.dx, dy = +el.dataset.dy, ro = +el.dataset.r, d = +el.dataset.d;
+          const e = Math.min(1, t * d), zij = 1 - Math.pow(1 - e, 3);
+          const basis = el.offsetLeft + el.offsetWidth / 2, doelX = dx < 0 ? -.12 * W : 1.12 * W;
+          const x = (doelX - basis) * zij, y = dy * e * innerHeight * .3 - na * .15;
+          el.style.opacity = e < .05 ? (e / .05).toFixed(2) : 1;
+          el.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) scale(" + (.6 + zij * 1.4).toFixed(2) + ") rotate(" + (ro * e).toFixed(1) + "deg)"; }); };
+      addEventListener("scroll", vlieg, { passive: true }); addEventListener("resize", vlieg); vlieg();
     }
     if (rust) { regels.forEach((el) => el.classList.add("on")); }
     else {
