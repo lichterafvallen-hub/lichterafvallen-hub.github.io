@@ -65,6 +65,48 @@
     $$(".reken,.quizbox").forEach((s) => s.addEventListener("mousemove", (e) => { const r = s.getBoundingClientRect(); s.style.setProperty("--gx", (e.clientX - r.left) + "px"); s.style.setProperty("--gy", (e.clientY - r.top) + "px"); }));
   }
 
+  /* foto van het stel: groeit van kader naar volledig scherm tijdens scrollen */
+  const groei = document.querySelector("[data-groei]");
+  if (groei && !rust) {
+    const spoor = groei.closest(".m2-spoor"); let raf2 = 0;
+    const upd2 = () => { raf2 = 0; const r = spoor.getBoundingClientRect(), weg = r.height - innerHeight;
+      const g = weg > 0 ? Math.min(1, Math.max(0, -r.top / (weg * .8))) : 1;
+      groei.style.setProperty("--g", g.toFixed(3)); };
+    addEventListener("scroll", () => { if (!raf2) raf2 = requestAnimationFrame(upd2); }, { passive: true });
+    addEventListener("resize", upd2); upd2();
+  } else if (groei) groei.style.setProperty("--g", 1);
+
+  /* salade-video: beeldjes volgen het scrollen (vooruit en terug), zinnen wisselen */
+  const scrub = document.querySelector("[data-scrub]");
+  if (scrub) {
+    const N = +scrub.dataset.n || 96, map = scrub.dataset.map || "img/v7/salade/";
+    const cv = scrub.querySelector("canvas"), ctx = cv.getContext("2d"), regels = scrub.querySelectorAll(".m3-r");
+    const beelden = []; let laatste = -1, raf3 = 0;
+    const naam = (i) => map + "f" + String(i + 1).padStart(3, "0") + ".webp";
+    const teken = (i) => { const im = beelden[i]; if (!im || !im.complete || !im.naturalWidth) return false;
+      if (cv.width !== im.naturalWidth) { cv.width = im.naturalWidth; cv.height = im.naturalHeight; }
+      ctx.drawImage(im, 0, 0); scrub.classList.add("klaar"); return true; };
+    const voortgang = () => { const r = scrub.getBoundingClientRect(), weg = r.height - innerHeight; return weg > 0 ? Math.min(1, Math.max(0, -r.top / weg)) : 0; };
+    /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
+    let doel = 0, nu = 0;
+    const lus = () => { raf3 = 0; nu += (doel - nu) * .12; if (Math.abs(doel - nu) < .02) nu = doel;
+      const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
+      if (i !== laatste) { let j = i; while (j >= 0 && !teken(j)) j--; if (j >= 0) laatste = i; }
+      if (nu !== doel) raf3 = requestAnimationFrame(lus); };
+    const upd3 = () => { const p = voortgang();
+      /* eerst rustige schaal (tot A), het loskomen (A tot B) gaat snel, daarna rustig vliegen tot het eind */
+      const q = Math.min(1, p / .9), A = +scrub.dataset.a || 0, B = +scrub.dataset.b || 0;
+      doel = !B ? q * (N - 1) : q < .1 ? q / .1 * A : q < .2 ? A + (q - .1) / .1 * (B - A) : B + (q - .2) / .8 * (N - 1 - B);
+      const stap = p < .2 ? 0 : p < .6 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
+      if (!raf3) raf3 = requestAnimationFrame(lus); };
+    if (rust) { regels.forEach((el) => el.classList.add("on")); }
+    else {
+      const laad = (i) => { const im = new Image(); im.decoding = "async"; im.src = naam(i); im.onload = () => { if (i <= Math.round(nu)) { laatste = -1; if (!raf3) raf3 = requestAnimationFrame(lus); } }; beelden[i] = im; };
+      const start = () => { for (let i = 0; i < N; i++) laad(i); addEventListener("scroll", upd3, { passive: true }); upd3(); };
+      new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); start(); } }, { rootMargin: "800px" }).observe(scrub);
+    }
+  }
+
   /* grote foto: zoomt en schuift mee met scrollen */
   const mom = document.querySelector("[data-zoom]");
   if (mom && !rust) {
@@ -247,7 +289,7 @@
   }
 
   /* pop-up: pas na 60% scrollen, één keer per bezoeker, niet op de gids zelf */
-  const p = document.getElementById("contactform") ? null : document.getElementById("lpop");
+  const p = (document.getElementById("contactform") || document.getElementById("gids")) ? null : document.getElementById("lpop");
   if (p && !/startgids/.test(location.pathname)) {
     const forceer = /[?&]popup/.test(location.search);
     if (!opslag.get("lichter-pop") || forceer) {
