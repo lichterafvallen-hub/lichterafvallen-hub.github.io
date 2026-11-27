@@ -255,23 +255,32 @@
   /* band met artikelen: loopt vanzelf, pauzeert bij muis, sleepbaar */
   /* diashow met plannen: gewone horizontale lijst die vanzelf één plan doorschuift.
      Klikken op een plan werkt gewoon; pijltjes gaan één plan terug of verder; op de telefoon veeg je. */
-  /* homepage, telefoon: gratis-test-plannen schuiven vanzelf van links naar rechts, met pijltjes. Vegen = even pauze. */
+  /* homepage, telefoon: gratis-test-plannen lopen continu en rustig door als een lopende band (naadloos rond),
+     met pijltjes. Aanraken = even stil, daarna loopt hij vanzelf verder. */
   document.querySelectorAll("#gratis .gratis3").forEach((kp) => {
-  if (!(matchMedia("(max-width:900px)").matches && kp.children.length > 1)) return;
-  {
+    if (!(matchMedia("(max-width:900px)").matches && kp.children.length > 1)) return;
     const wrap = document.createElement("div"); wrap.className = "band-wrap kp-wrap"; kp.parentNode.insertBefore(wrap, kp); wrap.appendChild(kp);
+    const orig = [...kp.children];
+    orig.forEach((c) => { const k = c.cloneNode(true); k.classList.add("kopie"); k.setAttribute("aria-hidden", "true"); k.querySelectorAll("a,button").forEach((x) => x.setAttribute("tabindex", "-1")); kp.appendChild(k); });
+    kp.classList.add("loopt");
     const pijl = (kant, label, pad) => { const b = document.createElement("button"); b.type = "button"; b.className = "bpijl " + kant; b.setAttribute("aria-label", label);
       b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${pad}"/></svg>`; wrap.appendChild(b); return b; };
     const terug = pijl("terug", "Vorige plan", "M15 5l-7 7 7 7"), verder = pijl("verder", "Volgende plan", "M9 5l7 7-7 7");
-    const stapB = () => { const c = kp.querySelector(".plan"); return c ? c.getBoundingClientRect().width + 14 : 300; };
-    const naar = (r) => { const max = kp.scrollWidth - kp.clientWidth; let d = kp.scrollLeft + r * stapB();
-      if (r > 0) d = kp.scrollLeft >= max - 4 ? 0 : Math.min(d, max); else d = kp.scrollLeft <= 4 ? max : Math.max(d, 0);
-      kp.scrollTo({ left: d, behavior: "smooth" }); };
-    let stilTot = 0; const pauze = (ms) => (stilTot = performance.now() + ms);
-    terug.onclick = () => { pauze(6000); naar(-1); }; verder.onclick = () => { pauze(6000); naar(1); };
-    kp.addEventListener("touchstart", () => pauze(6000), { passive: true });
-    if (!rust) setInterval(() => { if (performance.now() > stilTot && !document.hidden) naar(1); }, 3200);
-  }
+    const helft = () => kp.querySelector(".kopie").offsetLeft - orig[0].offsetLeft;
+    const stapB = () => orig[0].getBoundingClientRect().width + 14;
+    let pos = kp.scrollLeft, stilTot = 0, vinger = false;
+    const pauze = (ms) => (stilTot = performance.now() + ms);
+    const rond = () => { const h = helft(); if (h > 0) { if (kp.scrollLeft >= h) kp.scrollLeft -= h; if (kp.scrollLeft < 0) kp.scrollLeft += h; } pos = kp.scrollLeft; };
+    terug.onclick = () => { pauze(2500); if (kp.scrollLeft < stapB()) kp.scrollLeft += helft(); kp.scrollTo({ left: kp.scrollLeft - stapB(), behavior: "smooth" }); };
+    verder.onclick = () => { pauze(2500); kp.scrollTo({ left: kp.scrollLeft + stapB(), behavior: "smooth" }); };
+    kp.addEventListener("touchstart", () => { vinger = true; }, { passive: true });
+    kp.addEventListener("touchend", () => { vinger = false; pauze(1500); }, { passive: true });
+    let vorige = 0;
+    const lus = (t) => { const dt = vorige ? Math.min(50, t - vorige) : 16; vorige = t;
+      if (!vinger && t > stilTot && !document.hidden) { pos += dt * .035; kp.scrollLeft = pos; rond(); } else pos = kp.scrollLeft;
+      if (!vinger && t > stilTot) rond();
+      requestAnimationFrame(lus); };
+    if (!rust) requestAnimationFrame(lus);
   });
 
   /* diashow met plannen: loopt continu en rustig door (de lijst staat er twee keer in, zodat hij naadloos rondgaat).

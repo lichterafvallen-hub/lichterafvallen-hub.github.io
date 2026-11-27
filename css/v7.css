@@ -1260,3 +1260,5 @@ footer{margin-top:0!important}
 /* tekst wisselt op de 'drop': de nieuwe zin springt erin met een kleine stuiter */
 .m3-r{transform:scale(.82) translateY(10px);transform-origin:0 60%}
 .m3-r.on{transform:none;transition:opacity .2s ease .12s,transform .5s cubic-bezier(.2,1.7,.35,1) .12s}
+/* lopende band op de telefoon: geen 'vastklikken' per kaart, anders kan hij niet soepel doorlopen */
+@media (max-width:900px){#gratis .gratis3.loopt{scroll-snap-type:none}}
