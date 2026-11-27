@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://lichterafvallen-hub.github.io/sitemap.xml
