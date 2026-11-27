@@ -1229,3 +1229,6 @@ footer{margin-top:0!important}
 /* korter scrollen: minder lang 'vast' bij de salade */
 .m3{height:200vh}
 @media (max-width:900px){.m3{height:175vh}}
+/* nog korter: 1 a 2 keer vegen op de telefoon */
+.m3{height:165vh}
+@media (max-width:900px){.m3{height:138vh}}
