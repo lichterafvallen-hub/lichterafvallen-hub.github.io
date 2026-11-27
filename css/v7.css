@@ -1243,3 +1243,5 @@ footer{margin-top:0!important}
 .vlieg img{opacity:0}
 /* stukjes zweven over de paarse achtergrond, maar achter tekst, info en afbeeldingen */
 #gratis>*{position:relative;z-index:41}
+/* telefoon: korter, omhoog + explosie in ongeveer 1 veeg */
+@media (max-width:900px){.m3{height:150vh}}
