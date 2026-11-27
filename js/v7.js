@@ -255,37 +255,33 @@
   /* band met artikelen: loopt vanzelf, pauzeert bij muis, sleepbaar */
   /* diashow met plannen: gewone horizontale lijst die vanzelf één plan doorschuift.
      Klikken op een plan werkt gewoon; pijltjes gaan één plan terug of verder; op de telefoon veeg je. */
-  /* homepage, telefoon: gratis-test-plannen lopen continu en rustig door als een lopende band (naadloos rond),
-     met pijltjes. Aanraken = even stil, daarna loopt hij vanzelf verder. */
+  /* homepage, telefoon: gratis-test-plannen lopen continu en rustig door als een lopende band (naadloos rond).
+     Werkt met transform (niet met scrollen), want iPhones laten een scrollvlak niet vanuit code bewegen.
+     Vinger erop = stil en zelf slepen; loslaten = na 1,5 s loopt hij vanzelf verder. Pijltjes schuiven 1 plan. */
   document.querySelectorAll("#gratis .gratis3").forEach((kp) => {
     if (!(matchMedia("(max-width:900px)").matches && kp.children.length > 1)) return;
     const wrap = document.createElement("div"); wrap.className = "band-wrap kp-wrap"; kp.parentNode.insertBefore(wrap, kp); wrap.appendChild(kp);
-    const orig = [...kp.children];
-    orig.forEach((c) => { const k = c.cloneNode(true); k.classList.add("kopie"); k.setAttribute("aria-hidden", "true"); k.querySelectorAll("a,button").forEach((x) => x.setAttribute("tabindex", "-1")); kp.appendChild(k); });
-    kp.classList.add("loopt");
+    const orig = [...kp.children], spoor = document.createElement("div"); spoor.className = "g3-spoor";
+    orig.forEach((c) => spoor.appendChild(c));
+    orig.forEach((c) => { const k = c.cloneNode(true); k.classList.add("kopie"); k.setAttribute("aria-hidden", "true"); k.querySelectorAll("a,button").forEach((x) => x.setAttribute("tabindex", "-1")); spoor.appendChild(k); });
+    kp.appendChild(spoor); kp.classList.add("loopt");
     const pijl = (kant, label, pad) => { const b = document.createElement("button"); b.type = "button"; b.className = "bpijl " + kant; b.setAttribute("aria-label", label);
       b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${pad}"/></svg>`; wrap.appendChild(b); return b; };
     const terug = pijl("terug", "Vorige plan", "M15 5l-7 7 7 7"), verder = pijl("verder", "Volgende plan", "M9 5l7 7-7 7");
-    const helft = () => kp.querySelector(".kopie").offsetLeft - orig[0].offsetLeft;
+    const helft = () => spoor.querySelector(".kopie").offsetLeft - orig[0].offsetLeft;
     const stapB = () => orig[0].getBoundingClientRect().width + 14;
-    let pos = kp.scrollLeft, stilTot = 0, vinger = false;
-    const pauze = (ms) => (stilTot = performance.now() + ms);
-    const rond = () => { const h = helft(); if (h > 0) { if (kp.scrollLeft >= h) kp.scrollLeft -= h; if (kp.scrollLeft < 0) kp.scrollLeft += h; } pos = kp.scrollLeft; };
-    terug.onclick = () => { pauze(2500); if (kp.scrollLeft < stapB()) kp.scrollLeft += helft(); kp.scrollTo({ left: kp.scrollLeft - stapB(), behavior: "smooth" }); };
-    verder.onclick = () => { pauze(2500); kp.scrollTo({ left: kp.scrollLeft + stapB(), behavior: "smooth" }); };
-    kp.addEventListener("touchstart", () => { vinger = true; }, { passive: true });
-    kp.addEventListener("touchend", () => { vinger = false; pauze(1500); }, { passive: true });
-    /* eigen positie bijhouden: telefoons ronden scrollLeft af op hele pixels, dan zou de band blijven staan */
-    let vorige = 0, liep = false;
+    let pos = 0, stilTot = 0, vinger = false, sx = 0, sp = 0, tween = null, vorige = 0;
+    const zet = () => { const h = helft(); if (h > 0) { while (pos >= h) pos -= h; while (pos < 0) pos += h; } spoor.style.transform = "translate3d(" + (-pos).toFixed(2) + "px,0,0)"; };
+    const schuif = (r) => { stilTot = performance.now() + 2500; tween = { van: pos, naar: pos + r * stapB(), t0: performance.now() }; };
+    terug.onclick = () => schuif(-1); verder.onclick = () => schuif(1);
+    kp.addEventListener("touchstart", (e) => { vinger = true; tween = null; sx = e.touches[0].clientX; sp = pos; }, { passive: true });
+    kp.addEventListener("touchmove", (e) => { if (vinger) { pos = sp - (e.touches[0].clientX - sx); zet(); } }, { passive: true });
+    kp.addEventListener("touchend", () => { vinger = false; stilTot = performance.now() + 1500; }, { passive: true });
     const lus = (t) => { const dt = vorige ? Math.min(50, t - vorige) : 16; vorige = t;
-      if (!vinger && t > stilTot && !document.hidden) {
-        if (!liep) { pos = kp.scrollLeft; liep = true; }
-        pos += dt * .035; const h = helft(); if (h > 0 && pos >= h) pos -= h;
-        kp.scrollLeft = pos;
-      } else { liep = false; }
+      if (tween) { const k = Math.min(1, (t - tween.t0) / 450), e = 1 - Math.pow(1 - k, 3); pos = tween.van + (tween.naar - tween.van) * e; if (k >= 1) tween = null; zet(); }
+      else if (!vinger && t > stilTot && !document.hidden) { pos += dt * .035; zet(); }
       requestAnimationFrame(lus); };
-    kp.addEventListener("scroll", () => { if (vinger || performance.now() < stilTot) { const h = helft(); if (h > 0 && kp.scrollLeft >= h) kp.scrollLeft -= h; } }, { passive: true });
-    if (!rust) requestAnimationFrame(lus);
+    zet(); requestAnimationFrame(lus);
   });
 
   /* diashow met plannen: loopt continu en rustig door (de lijst staat er twee keer in, zodat hij naadloos rondgaat).

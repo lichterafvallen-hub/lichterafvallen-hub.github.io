@@ -1262,3 +1262,9 @@ footer{margin-top:0!important}
 .m3-r.on{transform:none;transition:opacity .2s ease .12s,transform .5s cubic-bezier(.2,1.7,.35,1) .12s}
 /* lopende band op de telefoon: geen 'vastklikken' per kaart, anders kan hij niet soepel doorlopen */
 @media (max-width:900px){#gratis .gratis3.loopt{scroll-snap-type:none}}
+/* lopende band (telefoon): het spoor schuift met transform, het vlak zelf scrollt niet */
+@media (max-width:900px){
+  #gratis .gratis3.loopt{display:block!important;overflow:hidden!important;scroll-snap-type:none;padding:4px 0 14px!important;margin:0 calc(var(--zij,20px) * -1)!important}
+  .g3-spoor{display:flex;gap:14px;width:max-content;padding:0 var(--zij,20px);will-change:transform;touch-action:pan-y}
+  .g3-spoor .plan{flex:0 0 auto;width:calc(80vw - 4px)}
+}
