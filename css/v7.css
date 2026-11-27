@@ -1268,3 +1268,13 @@ footer{margin-top:0!important}
   .g3-spoor{display:flex;gap:14px;width:max-content;padding:0 var(--zij,20px);will-change:transform;touch-action:pan-y}
   .g3-spoor .plan{flex:0 0 auto;width:calc(80vw - 4px)}
 }
+/* lopende band ook op de computer */
+#gratis .gratis3.loopt{display:block!important;overflow:hidden!important;padding:6px 0 18px!important;margin-left:calc(var(--zij,90px) * -1)!important;margin-right:calc(var(--zij,90px) * -1)!important;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.g3-spoor{display:flex;gap:22px;width:max-content;padding:0 var(--zij,90px);will-change:transform}
+.g3-spoor .plan{flex:0 0 auto;width:340px}
+@media (max-width:900px){#gratis .gratis3.loopt{-webkit-mask:none;mask:none}.g3-spoor{gap:14px}.g3-spoor .plan{width:calc(80vw - 4px)}}
+/* onderste sectie (vragen/uitleg) in dezelfde kleur als de salade-achtergrond */
+.vragen{background:#e7e0d0!important}
+.vragen .vr-img{background:#ddd4c2}
+/* accentwoord bij de salade in tomatenrood: valt meer op op beige en past bij de salade */
+.m3-r em{color:#d4382a!important}
