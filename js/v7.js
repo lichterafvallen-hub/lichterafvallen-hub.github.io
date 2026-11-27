@@ -79,31 +79,49 @@
   /* salade-video: beeldjes volgen het scrollen (vooruit en terug), zinnen wisselen */
   const scrub = document.querySelector("[data-scrub]");
   if (scrub) {
-    const N = +scrub.dataset.n || 96, map = scrub.dataset.map || "img/v7/salade/";
+    /* telefoon: lichtere set met de helft van de beeldjes */
+    const mob = innerWidth < 900, ds = scrub.dataset;
+    const N = mob && ds.nm ? +ds.nm : +ds.n || 96, map = mob && ds.nm ? "img/v7/salade/mob/" : "img/v7/salade/";
+    const A = mob && ds.nm ? +ds.am : +ds.a || 0, B = mob && ds.nm ? +ds.bm : +ds.b || 0;
+    const pin = scrub.querySelector(".m3-pin");
     const cv = scrub.querySelector("canvas"), ctx = cv.getContext("2d"), regels = scrub.querySelectorAll(".m3-r");
-    const beelden = []; let laatste = -1, raf3 = 0;
+    const beelden = [], klaarB = []; let laatste = -1, getekend = -1, raf3 = 0;
     const naam = (i) => map + "f" + String(i + 1).padStart(3, "0") + ".webp";
-    const teken = (i) => { const im = beelden[i]; if (!im || !im.complete || !im.naturalWidth) return false;
+    /* alleen beeldjes tekenen die helemaal klaar (gedecodeerd) zijn; anders het dichtstbijzijnde klare beeldje */
+    const teken = (i) => { let j = -1; for (let k = 0; k < N; k++) { if (klaarB[i - k]) { j = i - k; break; } if (klaarB[i + k]) { j = i + k; break; } }
+      if (j < 0 || j === getekend) return; const im = beelden[j];
       if (cv.width !== im.naturalWidth) { cv.width = im.naturalWidth; cv.height = im.naturalHeight; }
-      ctx.drawImage(im, 0, 0); scrub.classList.add("klaar"); return true; };
-    const voortgang = () => { const r = scrub.getBoundingClientRect(), weg = r.height - innerHeight; return weg > 0 ? Math.min(1, Math.max(0, -r.top / weg)) : 0; };
+      ctx.drawImage(im, 0, 0); getekend = j; scrub.classList.add("klaar"); };
+    const voortgang = () => { const r = scrub.getBoundingClientRect(), weg = r.height - pin.offsetHeight; return weg > 0 ? Math.min(1, Math.max(0, -r.top / weg)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
-    const lus = () => { raf3 = 0; nu += (doel - nu) * .12; if (Math.abs(doel - nu) < .02) nu = doel;
+    const lus = () => { raf3 = 0; nu += (doel - nu) * .14; if (Math.abs(doel - nu) < .02) nu = doel;
       const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
-      if (i !== laatste) { let j = i; while (j >= 0 && !teken(j)) j--; if (j >= 0) laatste = i; }
+      if (i !== laatste) { teken(i); laatste = i; }
       if (nu !== doel) raf3 = requestAnimationFrame(lus); };
     const upd3 = () => { const p = voortgang();
       /* eerst rustige schaal (tot A), het loskomen (A tot B) gaat snel, daarna rustig vliegen tot het eind */
-      const q = Math.min(1, p / .9), A = +scrub.dataset.a || 0, B = +scrub.dataset.b || 0;
+      const q = Math.min(1, p / .9);
       doel = !B ? q * (N - 1) : q < .1 ? q / .1 * A : q < .2 ? A + (q - .1) / .1 * (B - A) : B + (q - .2) / .8 * (N - 1 - B);
       const stap = p < .2 ? 0 : p < .6 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
       if (!raf3) raf3 = requestAnimationFrame(lus); };
+    /* losse stukjes uit de video vliegen door over de volgende sectie */
+    const vl = scrub.querySelector(".vlieg");
+    if (vl && !rust) {
+      const stukjes = [...vl.children];
+      const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, innerHeight - r.bottom), p = voortgang();
+        if (r.bottom < -innerHeight || r.top > innerHeight) return;
+        vl.style.opacity = Math.min(1, Math.max(0, (p - .82) / .12)).toFixed(2);
+        stukjes.forEach((el) => { const d = +el.dataset.d, ro = +el.dataset.r;
+          el.style.transform = "translate3d(0," + (-na * d).toFixed(1) + "px,0) rotate(" + (na * ro / 500).toFixed(1) + "deg)"; }); };
+      addEventListener("scroll", vlieg, { passive: true }); vlieg();
+    }
     if (rust) { regels.forEach((el) => el.classList.add("on")); }
     else {
-      const laad = (i) => { const im = new Image(); im.decoding = "async"; im.src = naam(i); im.onload = () => { if (i <= Math.round(nu)) { laatste = -1; if (!raf3) raf3 = requestAnimationFrame(lus); } }; beelden[i] = im; };
+      const laad = (i) => { const im = new Image(); im.decoding = "async"; im.src = naam(i); const ok = () => { klaarB[i] = true; if (Math.abs(i - Math.round(nu)) < Math.abs(getekend - Math.round(nu)) || getekend < 0) { laatste = -1; if (!raf3) raf3 = requestAnimationFrame(lus); } };
+        im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).then(ok, ok); }; beelden[i] = im; };
       const start = () => { for (let i = 0; i < N; i++) laad(i); addEventListener("scroll", upd3, { passive: true }); upd3(); };
-      new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); start(); } }, { rootMargin: "800px" }).observe(scrub);
+      new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); start(); } }, { rootMargin: "1600px" }).observe(scrub);
     }
   }
 
