@@ -103,7 +103,8 @@
       const lengte = weg + start - st; return lengte > 0 ? Math.min(1, Math.max(0, (start - r.top) / lengte)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
-    const lus = () => { raf3 = 0; nu += (doel - nu) * (mob ? .3 : .2); if (Math.abs(doel - nu) < .02) nu = doel;
+    /* snel overslaan of terugspringen: meteen naar het juiste beeldje, niet alle beeldjes razendsnel afspelen (dat flikkert) */
+    const lus = () => { raf3 = 0; const rr = scrub.getBoundingClientRect(); if (rr.bottom < 0 || rr.top > innerHeight || Math.abs(doel - nu) > N * .3) nu = doel; else nu += (doel - nu) * (mob ? .3 : .2); if (Math.abs(doel - nu) < .02) nu = doel;
       const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
       if (i !== laatste) { teken(i); laatste = i; }
       if (nu !== doel) raf3 = requestAnimationFrame(lus); };
@@ -121,7 +122,8 @@
       /* vast in beeld; stukjes gaan meteen naar de zijkanten (nooit over de tekst) en verlaten het scherm zijwaarts */
       const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, stTop() + pin.offsetHeight - r.bottom);
         const t = Math.min(1, na / (innerHeight * .9));
-        if (t <= 0 || t >= 1 || r.top > innerHeight) { vl.style.visibility = "hidden"; return; }
+        const nuT = performance.now(), snel = Math.abs(scrollY - (vlieg.y || scrollY)) / Math.max(1, nuT - (vlieg.t || nuT)); vlieg.y = scrollY; vlieg.t = nuT;
+        if (t <= 0 || t >= 1 || r.top > innerHeight || snel > 2.5) { vl.style.opacity = 0; return; }
         vl.style.visibility = "visible"; vl.style.opacity = 1;
         const W = innerWidth;
         stukjes.forEach((el) => { const dx = +el.dataset.dx, dy = +el.dataset.dy, ro = +el.dataset.r, d = +el.dataset.d;

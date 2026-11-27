@@ -1278,3 +1278,5 @@ footer{margin-top:0!important}
 .vragen .vr-img{background:#ddd4c2}
 /* accentwoord bij de salade in tomatenrood: valt meer op op beige en past bij de salade */
 .m3-r em{color:#d4382a!important}
+/* stukjes zacht in en uit beeld (geen flits bij snel scrollen) */
+.vlieg{visibility:visible!important;opacity:0;transition:opacity .25s ease}
