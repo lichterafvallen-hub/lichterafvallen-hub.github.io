@@ -1241,3 +1241,5 @@ footer{margin-top:0!important}
 /* stukjes vast in beeld tijdens de overgang, zodat ze niet onder een volgende sectie verdwijnen */
 .vlieg{position:fixed!important;inset:0!important;top:0!important;height:100vh!important;height:100svh!important;z-index:40!important;overflow:hidden;visibility:hidden;opacity:1}
 .vlieg img{opacity:0}
+/* stukjes zweven over de paarse achtergrond, maar achter tekst, info en afbeeldingen */
+#gratis>*{position:relative;z-index:41}

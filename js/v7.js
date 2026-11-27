@@ -104,7 +104,7 @@
       if (!B) doel = q * (N - 1);
       else if (q < .5) { const h = q / .5; doel = h < .15 ? h / .15 * A : A + (h - .15) / .85 * (B - A); }
       else doel = B + (q - .5) / .5 * (N - 1 - B);
-      const stap = q < .5 ? 0 : q < .88 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
+      const stap = q < .5 ? 0 : 1; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
       if (!raf3) raf3 = requestAnimationFrame(lus); };
     /* 3e scroll: bij de overgang naar de plannen vliegen losse stukjes in 3D naar je toe en langs je heen */
     const vl = scrub.querySelector(".vlieg");
