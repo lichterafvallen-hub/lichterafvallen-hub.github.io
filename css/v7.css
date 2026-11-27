@@ -1255,3 +1255,14 @@ footer{margin-top:0!important}
   .m3-beeld::after{bottom:0;background:linear-gradient(rgba(231,224,208,0),#e7e0d0)}
   .vlieg img{filter:none!important}
 }
+/* telefoon: gele vorm bij de hero tot de rand, geen witte streep rechts */
+@media (max-width:900px){.hero-img::after{right:calc(var(--zij,20px) * -1)}}
+/* tekst wisselt op de 'drop': de nieuwe zin springt erin met een kleine stuiter */
+.m3-r{transform:scale(.82) translateY(10px);transform-origin:0 60%}
+.m3-r.on{transform:none;transition:opacity .2s ease .12s,transform .5s cubic-bezier(.2,1.7,.35,1) .12s}
+/* keto-pagina, telefoon: plannen naast elkaar om van links naar rechts te swipen */
+@media (max-width:900px){
+  .planband.pb-lila .plans{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px!important;margin:0 calc(var(--zij,20px) * -1);padding:4px var(--zij,20px) 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .planband.pb-lila .plans::-webkit-scrollbar{display:none}
+  .planband.pb-lila .plans .plan{flex:0 0 80%;scroll-snap-align:start;scroll-margin-left:var(--zij,20px)}
+}

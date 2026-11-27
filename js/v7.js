@@ -99,7 +99,7 @@
     const pas = () => { if (innerWidth === laatsteB) return; laatsteB = innerWidth;
       if (mob) scrub.style.height = (pin.offsetHeight + Math.round(hoogte0 * .45)) + "px"; else scrub.style.height = ""; };
     pas(); addEventListener("resize", pas);
-    const voortgang = () => { const r = scrub.getBoundingClientRect(), st = stTop(), weg = r.height - pin.offsetHeight, start = mob ? innerHeight * .6 : st;
+    const voortgang = () => { const r = scrub.getBoundingClientRect(), st = stTop(), weg = r.height - pin.offsetHeight, start = mob ? st + innerHeight * .12 : st;
       const lengte = weg + start - st; return lengte > 0 ? Math.min(1, Math.max(0, (start - r.top) / lengte)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
@@ -110,7 +110,7 @@
     /* 1e scroll: salade komt omhoog uit de schaal; 2e scroll: de explosie. Alleen vooruit, nooit terugspoelen. */
     const upd3 = () => { const p = voortgang(), q = Math.min(1, p / .96);
       if (!B) doel = q * (N - 1);
-      else if (q < .5) { const h = q / .5; doel = h < .15 ? h / .15 * A : A + (h - .15) / .85 * (B - A); }
+      else if (q < .5) { const h = q / .5, rust1 = mob ? .3 : .15; doel = h < rust1 ? 0 : h < rust1 + .12 ? (h - rust1) / .12 * A : A + (h - rust1 - .12) / (.88 - rust1) * (B - A); }
       else doel = B + (q - .5) / .5 * (N - 1 - B);
       const stap = q < .5 ? 0 : 1; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
       if (!raf3) raf3 = requestAnimationFrame(lus); };
@@ -322,15 +322,14 @@
     if (reset) reset.addEventListener("click", () => { opslag.set("lichter-gids", {}); location.reload(); });
   }
 
-  /* pop-up: pas na 60% scrollen, één keer per bezoeker, niet op de gids zelf */
-  const p = (document.getElementById("contactform") || document.getElementById("gids")) ? null : document.getElementById("lpop");
+  /* pop-up: na 3 seconden op de site, één keer per bezoeker, niet op de gids zelf en niet bij het contactformulier */
+  const p = document.getElementById("contactform") ? null : document.getElementById("lpop");
   if (p && !/startgids/.test(location.pathname)) {
     const forceer = /[?&]popup/.test(location.search);
     if (!opslag.get("lichter-pop") || forceer) {
-      const show = () => { if (!p.hidden) return; p.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add("on"))); opslag.set("lichter-pop", 1); removeEventListener("scroll", sc); };
+      const show = () => { if (!p.hidden) return; p.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add("on"))); opslag.set("lichter-pop", 1); };
       const close = () => { p.classList.remove("on"); setTimeout(() => (p.hidden = true), 300); };
-      const sc = () => { const m = document.documentElement.scrollHeight - innerHeight; if (m > 0 && scrollY / m > .6) show(); };
-      addEventListener("scroll", sc, { passive: true }); if (forceer) setTimeout(show, 300);
+      setTimeout(show, forceer ? 300 : 3000);
       p.querySelector(".lpop-x").onclick = close; p.querySelector(".lpop-no").onclick = close;
       p.addEventListener("click", (e) => { if (e.target === p) close(); }); addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
     }
