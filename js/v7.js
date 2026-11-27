@@ -94,13 +94,16 @@
       ctx.drawImage(im, 0, 0); getekend = j; scrub.classList.add("klaar"); };
     /* telefoon: blok precies zo hoog als tekst + video (geen leeg beige vlak), en de video begint al tijdens het inschuiven */
     const stTop = () => parseFloat(getComputedStyle(pin).top) || 0;
-    const pas = () => { if (mob) scrub.style.height = (pin.offsetHeight + Math.round(innerHeight * .45)) + "px"; else scrub.style.height = ""; };
+    /* alleen opnieuw rekenen als de breedte verandert: de adresbalk van de telefoon die in- en uitschuift telt niet */
+    let laatsteB = 0; const hoogte0 = innerHeight;
+    const pas = () => { if (innerWidth === laatsteB) return; laatsteB = innerWidth;
+      if (mob) scrub.style.height = (pin.offsetHeight + Math.round(hoogte0 * .45)) + "px"; else scrub.style.height = ""; };
     pas(); addEventListener("resize", pas);
     const voortgang = () => { const r = scrub.getBoundingClientRect(), st = stTop(), weg = r.height - pin.offsetHeight, start = mob ? innerHeight * .6 : st;
       const lengte = weg + start - st; return lengte > 0 ? Math.min(1, Math.max(0, (start - r.top) / lengte)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
-    const lus = () => { raf3 = 0; nu += (doel - nu) * .2; if (Math.abs(doel - nu) < .02) nu = doel;
+    const lus = () => { raf3 = 0; nu += (doel - nu) * (mob ? .3 : .2); if (Math.abs(doel - nu) < .02) nu = doel;
       const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
       if (i !== laatste) { teken(i); laatste = i; }
       if (nu !== doel) raf3 = requestAnimationFrame(lus); };

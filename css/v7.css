@@ -1247,3 +1247,11 @@ footer{margin-top:0!important}
 @media (max-width:900px){.m3{height:150vh}}
 /* telefoon: salade-blok zonder leeg vlak, plakt net onder de menubalk */
 @media (max-width:900px){.m3-pin{height:auto!important;top:80px;padding-top:12px;padding-bottom:10px;align-content:start}}
+/* telefoon: lichter voor de grafische chip, zodat het scrollen soepel loopt */
+@media (max-width:900px){
+  .m3-beeld{-webkit-mask:none!important;mask:none!important}
+  .m3-beeld::before,.m3-beeld::after{content:"";position:absolute;left:0;right:0;height:26%;z-index:2;pointer-events:none}
+  .m3-beeld::before{top:0;background:linear-gradient(#e7e0d0,rgba(231,224,208,0))}
+  .m3-beeld::after{bottom:0;background:linear-gradient(rgba(231,224,208,0),#e7e0d0)}
+  .vlieg img{filter:none!important}
+}
