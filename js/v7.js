@@ -275,11 +275,16 @@
     verder.onclick = () => { pauze(2500); kp.scrollTo({ left: kp.scrollLeft + stapB(), behavior: "smooth" }); };
     kp.addEventListener("touchstart", () => { vinger = true; }, { passive: true });
     kp.addEventListener("touchend", () => { vinger = false; pauze(1500); }, { passive: true });
-    let vorige = 0;
+    /* eigen positie bijhouden: telefoons ronden scrollLeft af op hele pixels, dan zou de band blijven staan */
+    let vorige = 0, liep = false;
     const lus = (t) => { const dt = vorige ? Math.min(50, t - vorige) : 16; vorige = t;
-      if (!vinger && t > stilTot && !document.hidden) { pos += dt * .035; kp.scrollLeft = pos; rond(); } else pos = kp.scrollLeft;
-      if (!vinger && t > stilTot) rond();
+      if (!vinger && t > stilTot && !document.hidden) {
+        if (!liep) { pos = kp.scrollLeft; liep = true; }
+        pos += dt * .035; const h = helft(); if (h > 0 && pos >= h) pos -= h;
+        kp.scrollLeft = pos;
+      } else { liep = false; }
       requestAnimationFrame(lus); };
+    kp.addEventListener("scroll", () => { if (vinger || performance.now() < stilTot) { const h = helft(); if (h > 0 && kp.scrollLeft >= h) kp.scrollLeft -= h; } }, { passive: true });
     if (!rust) requestAnimationFrame(lus);
   });
 
