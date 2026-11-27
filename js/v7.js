@@ -95,15 +95,15 @@
     const voortgang = () => { const r = scrub.getBoundingClientRect(), weg = r.height - pin.offsetHeight; return weg > 0 ? Math.min(1, Math.max(0, -r.top / weg)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
-    const lus = () => { raf3 = 0; nu += (doel - nu) * .14; if (Math.abs(doel - nu) < .02) nu = doel;
+    const lus = () => { raf3 = 0; nu += (doel - nu) * .2; if (Math.abs(doel - nu) < .02) nu = doel;
       const i = Math.min(N - 1, Math.max(0, Math.round(nu)));
       if (i !== laatste) { teken(i); laatste = i; }
       if (nu !== doel) raf3 = requestAnimationFrame(lus); };
     const upd3 = () => { const p = voortgang();
       /* eerst rustige schaal (tot A), het loskomen (A tot B) gaat snel, daarna rustig vliegen tot het eind */
-      const q = Math.min(1, p / .9);
-      doel = !B ? q * (N - 1) : q < .1 ? q / .1 * A : q < .2 ? A + (q - .1) / .1 * (B - A) : B + (q - .2) / .8 * (N - 1 - B);
-      const stap = p < .2 ? 0 : p < .6 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
+      const q = Math.min(1, p / .92);
+      doel = !B ? q * (N - 1) : q < .04 ? q / .04 * A : q < .12 ? A + (q - .04) / .08 * (B - A) : B + (q - .12) / .88 * (N - 1 - B);
+      const stap = p < .12 ? 0 : p < .55 ? 1 : 2; regels.forEach((el, k) => el.classList.toggle("on", k === stap));
       if (!raf3) raf3 = requestAnimationFrame(lus); };
     /* losse stukjes uit de video vliegen door over de volgende sectie */
     const vl = scrub.querySelector(".vlieg");

@@ -1226,3 +1226,6 @@ footer{margin-top:0!important}
 /* zinnen nooit over elkaar: eerst de oude weg, dan pas de nieuwe */
 .m3-r{transition:opacity .18s ease,transform .18s ease}
 .m3-r.on{transition:opacity .35s var(--ease) .2s,transform .35s var(--ease) .2s}
+/* korter scrollen: minder lang 'vast' bij de salade */
+.m3{height:200vh}
+@media (max-width:900px){.m3{height:175vh}}
