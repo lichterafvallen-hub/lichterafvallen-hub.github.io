@@ -92,7 +92,12 @@
       if (j < 0 || j === getekend) return; const im = beelden[j];
       if (cv.width !== im.naturalWidth) { cv.width = im.naturalWidth; cv.height = im.naturalHeight; }
       ctx.drawImage(im, 0, 0); getekend = j; scrub.classList.add("klaar"); };
-    const voortgang = () => { const r = scrub.getBoundingClientRect(), weg = r.height - pin.offsetHeight; return weg > 0 ? Math.min(1, Math.max(0, -r.top / weg)) : 0; };
+    /* telefoon: blok precies zo hoog als tekst + video (geen leeg beige vlak), en de video begint al tijdens het inschuiven */
+    const stTop = () => parseFloat(getComputedStyle(pin).top) || 0;
+    const pas = () => { if (mob) scrub.style.height = (pin.offsetHeight + Math.round(innerHeight * .45)) + "px"; else scrub.style.height = ""; };
+    pas(); addEventListener("resize", pas);
+    const voortgang = () => { const r = scrub.getBoundingClientRect(), st = stTop(), weg = r.height - pin.offsetHeight, start = mob ? innerHeight * .6 : st;
+      const lengte = weg + start - st; return lengte > 0 ? Math.min(1, Math.max(0, (start - r.top) / lengte)) : 0; };
     /* zacht meeglijden: het beeld loopt rustig achter het scrollen aan in plaats van te verspringen */
     let doel = 0, nu = 0;
     const lus = () => { raf3 = 0; nu += (doel - nu) * .2; if (Math.abs(doel - nu) < .02) nu = doel;
@@ -111,7 +116,7 @@
     if (vl && !rust) {
       const stukjes = [...vl.children];
       /* vast in beeld; stukjes gaan meteen naar de zijkanten (nooit over de tekst) en verlaten het scherm zijwaarts */
-      const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, innerHeight - r.bottom);
+      const vlieg = () => { const r = scrub.getBoundingClientRect(), na = Math.max(0, stTop() + pin.offsetHeight - r.bottom);
         const t = Math.min(1, na / (innerHeight * .9));
         if (t <= 0 || t >= 1 || r.top > innerHeight) { vl.style.visibility = "hidden"; return; }
         vl.style.visibility = "visible"; vl.style.opacity = 1;

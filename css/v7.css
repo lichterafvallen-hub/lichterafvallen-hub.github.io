@@ -1245,3 +1245,5 @@ footer{margin-top:0!important}
 #gratis>*{position:relative;z-index:41}
 /* telefoon: korter, omhoog + explosie in ongeveer 1 veeg */
 @media (max-width:900px){.m3{height:150vh}}
+/* telefoon: salade-blok zonder leeg vlak, plakt net onder de menubalk */
+@media (max-width:900px){.m3-pin{height:auto!important;top:80px;padding-top:12px;padding-bottom:10px;align-content:start}}
